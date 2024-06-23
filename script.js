@@ -73,8 +73,16 @@ function displayResults(allDaysTopics) {
         resultsContainer.appendChild(dayList);
     });
     allDaysTopics.forEach((dailyTopics, index) => {
-    const arrayContainer = document.createElement('div');
-        arrayContainer.innerText = `"Día ${index + 1}": ${JSON.stringify(dailyTopics)}`;
+        const arrayContainer = document.createElement('div');
+        const isLastDay = index === allDaysTopics.length - 1;
+    
+        if (isLastDay) {
+            arrayContainer.innerText = `"Día ${index + 1}": ${JSON.stringify(dailyTopics)}`;
+        } else {
+            arrayContainer.innerText = `"Día ${index + 1}": ${JSON.stringify(dailyTopics)},`;
+        }
+    
         resultsContainer.appendChild(arrayContainer);
     });
+    
 }
