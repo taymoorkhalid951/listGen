@@ -71,20 +71,21 @@ function generateUniqueDailyTopics(days) {
     const allDaysTopics = [];
     for (let i = 0; i < days; i++) {
         let dailyTopics;
-        let attempts = 0;
+        var attempts = 0;
         do {
-            dailyTopics = shuffleArray(shuffleArray([...topics])).slice(0, getRandomInt(13, 23));
+            dailyTopics = shuffleArray([...topics]).slice(0, getRandomInt(13, 22));
             attempts++;
-            if(attempts > 1000) {
-                alert('Exceeded Limit of attempts');
+            console.log(`Attempt ${attempts}: ${dailyTopics.length} topics`);
+            if (attempts > 1000) {
+                alert('Exceeded limit of attempts');
                 return;
             }
         } while (isSimilarToAnyDay(dailyTopics, allDaysTopics));
+        attempts = 0;
         allDaysTopics.push(dailyTopics);
     }
     return allDaysTopics;
 }
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -94,13 +95,15 @@ function shuffleArray(array) {
 }
 
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+    const num = Math.floor(Math.random() * (max - min + 1)) + min
+    console.log(num);
+    return num;
 }
 
 function isSimilarToAnyDay(dailyTopics, allDaysTopics) {
     return allDaysTopics.some(dayTopics => {
         const intersection = dailyTopics.filter(topic => dayTopics.includes(topic));
-        return intersection.length > 8;
+        return intersection.length > 14;
     });
 }
 
