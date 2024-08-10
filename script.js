@@ -1,27 +1,3 @@
-// OLD TOPICS (60)
-
-// const topics = [
-//     "Despido injustificado", "Robo con violencia", "Custodia de menores", "Accidente de tráfico",
-//     "Arrendamiento", "Incumplimiento de contrato", "Acoso laboral", "Divorcio contencioso",
-//     "Daños por colisión", "Usurpación", "Tráfico de drogas", "Mediación familiar",
-//     "Multas de tráfico", "Propiedad intelectual", "Derechos de licencia por maternidad/paternidad",
-//     "Pago de horas extras", "Fraude", "Pensión alimenticia", "Seguro de auto", "Venta de inmuebles",
-//     "Negligencia profesional", "Contratación temporal", "Violencia doméstica", "Conducción bajo influencia",
-//     "Expropiación", "Violación", "Disputas de herencia", "Licencias de conducir suspendidas",
-//     "Zonas de conservación", "Beneficios y compensaciones laborales", "Evaluaciones de desempeño injustas",
-//     "Homicidio culposo", "Cambio de nombre", "Renovación de contratos de arrendamiento",
-//     "Litigios contractuales", "Condiciones de trabajo inseguras", "Lesiones personales en accidentes",
-//     "Reconocimiento de paternidad", "Competencia desleal", "Venta de vehículos defectuosos",
-//     "Tutela de menores", "Desalojos", "Procedimientos disciplinarios", "Derecho de paso",
-//     "Protección al consumidor", "Discriminación en el trabajo", "Separación legal",
-//     "Licencias comerciales", "Vandalismo", "Adopción", "Reclamaciones de seguro",
-//     "Disputas de copropiedad", "Quiebra", "Reclamaciones por lesiones en el trabajo",
-//     "Delitos cibernéticos", "Robo de vehículo", "Asalto", "Tráfico de personas", "Extorsión",
-//     "Acuerdos de no competencia", "Falsificación de documentos laborales"
-// ];
-
-// NEW TOPICS (30)
-
 const topics = [
     "Despido injustificado",
     "Custodia de menores",
@@ -56,8 +32,6 @@ const topics = [
     "Ley de tránsito y multas"
 ];
 
-
-
 const startButton = document.getElementById('startButton');
 const resultsContainer = document.getElementById('results');
 
@@ -69,9 +43,10 @@ startButton.addEventListener('click', () => {
 
 function generateUniqueDailyTopics(days) {
     const allDaysTopics = [];
+    let previousSize = -1; // Initialize with a value that won't match any size
     for (let i = 0; i < days; i++) {
         let dailyTopics;
-        var attempts = 0;
+        let attempts = 0;
         do {
             dailyTopics = shuffleArray([...topics]).slice(0, getRandomInt(13, 22));
             attempts++;
@@ -80,12 +55,16 @@ function generateUniqueDailyTopics(days) {
                 alert('Exceeded limit of attempts');
                 return;
             }
-        } while (isSimilarToAnyDay(dailyTopics, allDaysTopics));
-        attempts = 0;
+        } while (
+            isSimilarToAnyDay(dailyTopics, allDaysTopics) ||
+            dailyTopics.length === previousSize // Ensure it's not the same size as the previous day's topics
+        );
+        previousSize = dailyTopics.length; // Update the size for the next iteration
         allDaysTopics.push(dailyTopics);
     }
     return allDaysTopics;
 }
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -95,7 +74,7 @@ function shuffleArray(array) {
 }
 
 function getRandomInt(min, max) {
-    const num = Math.floor(Math.random() * (max - min + 1)) + min
+    const num = Math.floor(Math.random() * (max - min + 1)) + min;
     console.log(num);
     return num;
 }
@@ -103,7 +82,7 @@ function getRandomInt(min, max) {
 function isSimilarToAnyDay(dailyTopics, allDaysTopics) {
     return allDaysTopics.some(dayTopics => {
         const intersection = dailyTopics.filter(topic => dayTopics.includes(topic));
-        return intersection.length > 14;
+        return intersection.length > 14; // Adjust the threshold if needed
     });
 }
 
@@ -133,5 +112,4 @@ function displayResults(allDaysTopics) {
     
         resultsContainer.appendChild(arrayContainer);
     });
-    
 }
